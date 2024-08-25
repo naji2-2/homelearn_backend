@@ -1,11 +1,8 @@
-/* 커뮤니티 게시물 api */
 const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
 
 const router = express.Router();
 
-
-//console.log(uuidAPIKey.create());
 
 const key = {
     apiKey: process.env.API_KEY,
@@ -13,6 +10,15 @@ const key = {
 }
 
 const { BaseballCommunityPost } = require('C:/homelearn_backend/models/baseball_community_post_db.js');
+
+router.use('/:apikey', (req, res, next) => {
+    const { apikey } = req.params;
+    if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+        console.warn(`Invalid API key`);
+    }
+    next();
+});
+
 
 // POST /posts - 새로운 게시물 작성
 router.post('/:apikey/:id', async (req, res) => {
@@ -89,7 +95,7 @@ router.delete('/:apikey/:id', async (req, res) => {
 
         if (post) {
             await post.destroy();
-            res.status(204).json({ message: '게시물이 삭제되었습니다.' });
+            res.status(204).send();
         } else {
             res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
         }

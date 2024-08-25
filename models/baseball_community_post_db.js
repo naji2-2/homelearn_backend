@@ -37,19 +37,11 @@ const BaseballCommunityPost = (sequelize) => {
             type: DataTypes.INTEGER, // 새로운 컬럼: comments_num
             defaultValue: 0, // 기본값을 0으로 설정
             allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
         }
     }, {
         tableName: 'baseball_community_post',
         timestamps: true,
-        underscored: true, // snake_case를 사용할 경우
+        underscored: true // snake_case를 사용할 경우
     });
 };
 

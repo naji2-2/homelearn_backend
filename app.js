@@ -16,6 +16,7 @@ const BaseballTeamRouter = require('./routes/baseball_team_api');
 const BaseballHomegroundInfoRouter = require('./routes/baseball_homeground_info_api');
 const BaseballCommunityPostRouter = require('./routes/baseball_community_post_api');
 const BaseballHomegroundParkingRouter = require('./routes/baseball_homeground_parking_api');
+const FoodShop = require('./routes/food_shop_api');
 
 app.use(cors());
 
@@ -48,6 +49,7 @@ app.use('/api/teams', BaseballTeamRouter);
 app.use('/api/homegrounds', BaseballHomegroundInfoRouter);
 app.use('/api/parking', BaseballHomegroundParkingRouter);
 app.use('/api/posts', BaseballCommunityPostRouter);
+app.use('/api/foodshop', FoodShop);
 
 app.get('/',(req,res)=>{
     res.send('Hello, Express');
