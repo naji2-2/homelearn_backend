@@ -20,6 +20,8 @@ sequelize.authenticate()
 
 // 모델 가져오기
 const BaseballCommunityPost = require('./baseball_community_post_db.js')(sequelize);
+const FoodShop = require('./food_shop_db.js')(sequelize);
+
 
 // 모델 동기화
 sequelize.sync({ alter: true }) 
