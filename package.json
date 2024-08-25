@@ -1,0 +1,33 @@
+{
+  "name": "node_test",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "api": "^6.1.2",
+    "api.js": "^0.0.5",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "module": "^1.2.5",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.0",
+    "nodemon": "^3.1.4",
+    "path": "^0.12.7",
+    "sequelize": "^6.37.3",
+    "uuid-apikey": "^1.5.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(index.js) server.js"
+  },
+  "description": ""
+}
