@@ -4,7 +4,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const path = require('path');
-const api = require('./api.js');
 const cors = require('cors');
 //설치한 미들웨어 및 모듈  불러오기
 dotenv.config();
@@ -17,6 +16,7 @@ const BaseballHomegroundInfoRouter = require('./routes/baseball_homeground_info_
 const BaseballCommunityPostRouter = require('./routes/baseball_community_post_api');
 const BaseballHomegroundParkingRouter = require('./routes/baseball_homeground_parking_api');
 const FoodShop = require('./routes/food_shop_api');
+const CheerSong = require('./routes/cheer_song_api');
 
 app.use(cors());
 
@@ -50,6 +50,7 @@ app.use('/api/homegrounds', BaseballHomegroundInfoRouter);
 app.use('/api/parking', BaseballHomegroundParkingRouter);
 app.use('/api/posts', BaseballCommunityPostRouter);
 app.use('/api/foodshop', FoodShop);
+app.use('/api/cheersong', CheerSong);
 
 app.get('/',(req,res)=>{
     res.send('Hello, Express');
