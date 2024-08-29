@@ -6,12 +6,13 @@ const dotenv = require('dotenv');
 const path = require('path');
 const api = require('./api.js');
 const cors = require('cors');
+const initializeData = require('./config/initializeData');
 //설치한 미들웨어 및 모듈  불러오기
 dotenv.config();
 
 const app = express();
 
-// routes 만든 라우터 불러오기
+// 라우터 설정
 const BaseballTeamRouter = require('./routes/baseball_team_api');
 const BaseballHomegroundInfoRouter = require('./routes/baseball_homeground_info_api');
 const BaseballCommunityPostRouter = require('./routes/baseball_community_post_api');
@@ -41,15 +42,14 @@ app.use(session({
 }));
 
 
-// app.use((req, res, next) => {
-//     console.log('모든 요청에 다 실행됩니다.');
-// });
-
+// routes 만든 라우터 불러오기
 app.use('/api/teams', BaseballTeamRouter);
 app.use('/api/homegrounds', BaseballHomegroundInfoRouter);
 app.use('/api/parking', BaseballHomegroundParkingRouter);
 app.use('/api/posts', BaseballCommunityPostRouter);
 app.use('/api/foodshop', FoodShop);
+
+
 
 app.get('/',(req,res)=>{
     res.send('Hello, Express');
@@ -61,6 +61,14 @@ express에서는 http와 다르게 res.write, rew.end 대신 res.send 사용
 
 
 const port = app.get('port'); // 설정된 포트 가져오기
-app.listen(port, () => {
-    console.log(`${app.get('port')}번 포트에서 대기 중`);
+
+app.listen(port, async () => {
+    try {
+        await initializeData(); // 데이터베이스 초기화
+        //await syncDatabase(); // 수정: 데이터베이스 동기화 추가
+        console.log(`${port}번 포트에서 대기 중`);
+    } catch (error) {
+        console.error('Error during initialization:', error);
+        process.exit(1); // 초기화 실패 시 프로세스 종료
+    }
 });

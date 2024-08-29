@@ -1,5 +1,8 @@
+// routes/food_shop_api.js
+
 const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
+const FoodShop = require('../models/food_shop_model.js')(require('../config/db'));
 
 const router = express.Router();
 
@@ -8,83 +11,77 @@ const key = {
     uuid: '36f77065-60fa-4b4a-90db-f2a02be13f34'
 };
 
-const { FoodShop } = require('C:/homelearn_backend/models/food_shop_db.js');
-
-router.use('/:apikey', (req, res, next) => {
-    const { apikey } = req.params;
-    if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-        console.warn(`Invalid API key`);
-    }
-    next();
-});
-
-
-// CREATE: 새로운 음식점 추가
-router.post('/:apikey', async (req, res) => {
-    try {
-        const foodShop = await FoodShop.create(req.body);
-        res.status(201).json(foodShop);
-    } catch (error) {
-        console.error('음식점 생성 오류:', error);
-        res.status(400).json({ error: '음식점 생성 중 오류가 발생했습니다.' });
-    }
-});
-
-// READ: 모든 음식점 조회
+// 모든 음식점을 조회하는 API
 router.get('/:apikey', async (req, res) => {
     try {
+        const { apikey } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        // 모든 음식점 정보 조회
         const foodShops = await FoodShop.findAll();
-        res.status(200).json(foodShops);
+
+        if (foodShops.length > 0) {
+            res.status(200).json(foodShops);
+        } else {
+            res.status(404).send('No food shops found.');
+        }
     } catch (error) {
-        console.error('음식점 조회 오류:', error);
-        res.status(500).json({ error: '음식점 조회 중 오류가 발생했습니다.' });
+        console.error('Error fetching food shops:', error);
+        res.status(500).send('Failed to fetch food shops');
     }
 });
 
-// READ: 특정 음식점 조회 (ID 기준)
+// 특정 음식점을 ID로 조회하는 API
 router.get('/:apikey/:id', async (req, res) => {
     try {
-        const foodShop = await FoodShop.findByPk(req.params.id);
+        const { apikey, id } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        // 특정 음식점 정보 조회
+        const foodShop = await FoodShop.findByPk(id);
+
         if (foodShop) {
             res.status(200).json(foodShop);
         } else {
-            res.status(404).json({ error: '음식점을 찾을 수 없습니다.' });
+            res.status(404).send('Food shop not found.');
         }
     } catch (error) {
-        console.error('음식점 조회 오류:', error);
-        res.status(500).json({ error: '음식점 조회 중 오류가 발생했습니다.' });
+        console.error('Error fetching food shop:', error);
+        res.status(500).send('Failed to fetch food shop');
     }
 });
 
-// UPDATE: 특정 음식점 정보 업데이트
-router.put('/:apikey/:id', async (req, res) => {
+// 특정 홈구장에 속한 음식점을 조회하는 API
+router.get('/:apikey/homeground/:homeground', async (req, res) => {
     try {
-        const foodShop = await FoodShop.findByPk(req.params.id);
-        if (foodShop) {
-            await foodShop.update(req.body);
-            res.status(200).json(foodShop);
-        } else {
-            res.status(404).json({ error: '음식점을 찾을 수 없습니다.' });
-        }
-    } catch (error) {
-        console.error('음식점 수정 오류:', error);
-        res.status(400).json({ error: '음식점 수정 중 오류가 발생했습니다.' });
-    }
-});
+        const { apikey, homeground } = req.params;
 
-// DELETE: 특정 음식점 삭제
-router.delete('/:apikey/:id', async (req, res) => {
-    try {
-        const foodShop = await FoodShop.findByPk(req.params.id);
-        if (foodShop) {
-            await foodShop.destroy();
-            res.status(204).send();
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        // 특정 홈구장에 속한 음식점 정보 조회
+        const foodShops = await FoodShop.findAll({
+            where: { homeground: homeground }
+        });
+
+        if (foodShops.length > 0) {
+            res.status(200).json(foodShops);
         } else {
-            res.status(404).json({ error: '음식점을 찾을 수 없습니다.' });
+            res.status(404).send('No food shops found for the specified homeground.');
         }
     } catch (error) {
-        console.error('음식점 삭제 오류:', error);
-        res.status(500).json({ error: '음식점 삭제 중 오류가 발생했습니다.' });
+        console.error('Error fetching food shops by homeground:', error);
+        res.status(500).send('Failed to fetch food shops by homeground');
     }
 });
 
