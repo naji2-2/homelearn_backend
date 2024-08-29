@@ -9,7 +9,7 @@ const key = {
     uuid: '36f77065-60fa-4b4a-90db-f2a02be13f34'
 }
 
-const { BaseballCommunityPost } = require('C:/homelearn_backend/models/baseball_community_post_db.js');
+const { BaseballCommunityPost } = require('../models/baseball_community_post_model.js');
 
 router.use('/:apikey', (req, res, next) => {
     const { apikey } = req.params;

@@ -1,11 +1,15 @@
 const { DataTypes } = require('sequelize');
 
-const FoodShop = (sequelize) => {
-    return sequelize.define('FoodShop', {
+module.exports = (sequelize) => {
+    const FoodShop = sequelize.define('FoodShop', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+            allowNull: false,
+        },
+        homeground: {
+            type: DataTypes.STRING(255),
             allowNull: false,
         },
         name: {
@@ -39,6 +43,5 @@ const FoodShop = (sequelize) => {
         timestamps: true,
         underscored: true,
     });
+    return FoodShop;
 };
-
-module.exports = FoodShop;
