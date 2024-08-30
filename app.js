@@ -17,6 +17,7 @@ const BaseballHomegroundInfoRouter = require('./routes/baseball_homeground_info_
 const BaseballCommunityPostRouter = require('./routes/baseball_community_post_api');
 const BaseballHomegroundParkingRouter = require('./routes/baseball_homeground_parking_api');
 const FoodShop = require('./routes/food_shop_api');
+const FoodShopReview = require('./routes/food_shop_review_api');
 const CheerSong = require('./routes/cheer_song_api');
 
 app.use(cors());
@@ -48,6 +49,7 @@ app.use('/api/homegrounds', BaseballHomegroundInfoRouter);
 app.use('/api/parking', BaseballHomegroundParkingRouter);
 app.use('/api/posts', BaseballCommunityPostRouter);
 app.use('/api/foodshop', FoodShop);
+app.use('/api/foodshopreview', FoodShopReview);
 app.use('/api/cheersong', CheerSong);
 
 
