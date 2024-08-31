@@ -2,6 +2,14 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     const FoodShopReview = sequelize.define('FoodShopReview', {
+        shopId: {  // 추가된 필드
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'food_shop',
+                key: 'id'
+            }
+        },
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false
@@ -27,5 +35,7 @@ module.exports = (sequelize) => {
         timestamps: true,
         underscored: true
     });
+
+
     return FoodShopReview;
 }

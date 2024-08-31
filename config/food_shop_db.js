@@ -33,42 +33,6 @@ const initializeFoodShops = async () => {
                 today_order: 0,
                 star: 0,
                 location: '456 Burger Avenue'
-            },
-            {
-                name: 'Pizza Best',
-                homeground: '잠실 야구장',
-                category: 'Pizza',
-                menu: JSON.stringify([
-                    { item_name: 'Pepperoni Pizza', price: 12.99, description: 'A classic pizza topped with pepperoni.' },
-                    { item_name: 'Veggie Pizza', price: 10.99, description: 'A healthy pizza loaded with fresh vegetables.' }
-                ]),
-                today_order: 0,
-                star: 0,
-                location: '123 Pizza Street'
-            },
-            {
-                name: 'Pizza Best',
-                homeground: '잠실 야구장',
-                category: 'Pizza',
-                menu: JSON.stringify([
-                    { item_name: 'Pepperoni Pizza', price: 12.99, description: 'A classic pizza topped with pepperoni.' },
-                    { item_name: 'Veggie Pizza', price: 10.99, description: 'A healthy pizza loaded with fresh vegetables.' }
-                ]),
-                today_order: 0,
-                star: 0,
-                location: '123 Pizza Street'
-            },
-            {
-                name: 'Pizza Best',
-                homeground: '잠실 야구장',
-                category: 'Pizza',
-                menu: JSON.stringify([
-                    { item_name: 'Pepperoni Pizza', price: 12.99, description: 'A classic pizza topped with pepperoni.' },
-                    { item_name: 'Veggie Pizza', price: 10.99, description: 'A healthy pizza loaded with fresh vegetables.' }
-                ]),
-                today_order: 0,
-                star: 0,
-                location: '123 Pizza Street'
             }
         ];
 
@@ -80,7 +44,7 @@ const initializeFoodShops = async () => {
             return; // 추가된 데이터가 없으면 초기화하지 않기
         }
 
-        await FoodShop.destroy({ truncate: true }); // 테이블 데이터 초기화
+        await FoodShop.destroy({ where: {}, delete: true }); // 테이블 데이터 초기화
         await FoodShop.bulkCreate(foodShopData);    // 데이터 삽입
 
         existingShopCount = await FoodShop.count();
