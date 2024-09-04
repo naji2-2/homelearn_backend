@@ -1,47 +1,37 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    const FoodShop = sequelize.define('FoodShop', {
+    const BaseballTeam = sequelize.define('BaseballTeam', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false,
         },
-        homeground: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-        },
         name: {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        menu: {
+        image_url: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
+        foundation_date: {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        category: {
+        hometown: {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        today_order: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0,
-            allowNull: false,
-        },
-        star: {
-            type: DataTypes.FLOAT,
-            defaultValue: 0,
-            allowNull: false,
-        },
-        location: {
+        homeground: {
             type: DataTypes.STRING(255),
-            allowNull: false,
+            allowNull: true,
         }
     }, {
-        tableName: 'food_shop',
+        tableName: 'baseball_team',
         timestamps: true,
         underscored: true,
     });
-    return FoodShop;
+    return BaseballTeam;
 };

@@ -1,118 +1,64 @@
-/* 응원가 api */
 const express = require('express');
-const app = express();
 const uuidAPIKey = require('uuid-apikey');
+const CheerSong = require('../models/cheer_song_model.js')(require('../config/db'));
+
 
 const router = express.Router();
 
-//console.log(uuidAPIKey.create());
 
 const key = {
     apiKey: process.env.API_KEY,
     uuid: '36f77065-60fa-4b4a-90db-f2a02be13f34'
-}
+};
 
-router.get('/:apikey/:type', async(req, res) =>{
-    let {apikey, type} = req.params;
-    if(!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-        res.send('apikey is not valid.');
-    }else {
-        if(type == '삼성 라이온즈'){     
-            let data = [
-                {name : "엘도라도", lyrics : "오~오오오오오 최! 강! 삼! 성!오~오오오오오 최! 강! 삼! 성!오~오오오오오 최! 강! 삼! 성!오~오오오오오 최! 강! 삼! 성!최강삼성 승리하리라~오오오 오오오오오오 최강삼성 승리하리라~오오오 오오오오오오오~오오오오오 최! 강! 삼! 성! 오~오오오오오 최! 강! 삼! 성! 오~오오오오오 최! 강! 삼! 성! 오~오오오오오 최! 강! 삼! 성!최강삼성 승리하리라~오오오 오오오오오오 최강삼성 승리하리라~오오오 오오오오오오", like : 0, vido_url : "https://youtu.be/euO5P5XtXF0"},
-                {name : "승리를 위해", lyrics : "오~오오 오~ 최! 강! 삼! 성! 오~오오 오~ 최! 강! 삼! 성! 승리를 위해 달려가자 워~오오~ 삼성 라이온즈 파이팅! 승리를 위해 달려가자 워~오오~ 삼성 라이온즈 파이팅! 오~오오 오~ 최! 강! 삼! 성! 오~오오 오~ 최! 강! 삼! 성! 승리를 위해 달려가자 워~오오~ 삼성 라이온즈 파이팅! 승리를 위해 달려가자 워~오오~ 삼성 라이온즈 파이팅!", like : 0, vido_url : "https://youtu.be/Tm1a5Yc6a7Y"},
-                {name : "2020 승리하라 최강삼성(사자후)", lyrics : "워어 어어어 워어어 어 워어어어 어어 워어어어어어 워어 어어어 워어어어어 워어어어 어어 어 승!리!하!라! 최!강!삼!성! 최강 삼성 승리를 위해 하나 되어 외쳐라 최!강!삼!성! 최강 삼성 승리를 위해 모두 함께 외쳐라 으야! 워어 어어 워어어어어 워어어어 어어 최!강!삼!성! 최강 삼성 승리를 위해 모두 함께 외쳐라 으야! 모두 함께 외쳐라~ 으야!", like : 0, vido_url : ""},
-                {name : "승리의 그 이름", lyrics : "오오오오오오오오~ 오오오오오오오오~ 승리의 그 이름 우리는 삼성 오늘도 승리 하리라 일어나 다함께 외쳐라 승리의 그 이름을 지금부터 울려 퍼진다 들어라 그 이름을 최!강!삼!성 라!이!온!즈! 오오오오오오오오~ 오오오오오오오오~ 승리의 그 이름 우리는 삼성 오늘도 승리하리라 끝까지 달려라 승리를 위해 승리의 이름 삼성", like : 0, vido_url : "https://music.youtube.com/watch?v=7ep-7_xHRSs"},
-                {name : "최강삼성/혼연일체 (渾然一體)", lyrics : "승리의 순간을 꿈꾸며 뜨겁게 바로 여기 우리의 심장이 뛰는 곳 누구보다 빠르게 누구보다 ", like : 0, vido_url : "https://music.youtube.com/watch?v=uU8RpEGV1-E"}
-            ];
-            res.send(data);
-        }else if(type == '한화 이글스'){
-            let data = [
-                {name : "나는 행복합니다", lyrics : "나는 행복합니다 나는 행복합니다 나는 행복합니다 이글스라 행복합니다 나는 행복합니다 나는 행복합니다 나는 행복합니다 한화라서 행복합니다", like : 0, vido_url : "https://youtu.be/Ne-EFpnJ8wA?feature=shared"},
-                {name : "사랑한다 최강한화", lyrics : "사랑한다 최강한화 워어어어어어어 최강한화의 승리 위해 워어어어어어어 사랑한다 최강한화 워어어어어어어 최강한화의 승리 위해 워어어어어어어", like : 0, vido_url : "https://youtu.be/G1SuyXx8lN4"},
-                {name : "그대에게", lyrics : "최!강!한!화! 최!강!한!화! 최!강!한!화! 최!강!한!화! 오~ 오~ 최! 강! 한! 화! 오~ 오~ 최! 강! 한! 화! 파이팅~", like : 0, vido_url : "https://youtu.be/4EmGZMYLf1M"},
-                {name : "사랑한다 이글스", lyrics : "사랑한다 이글스 영원하라 이글스 승리를 향한 함성을 다같이 외쳐 승리를 향한 함성을 다같이 외쳐필! 승! 불! 패! 최! 강! 한! 화! 워어어어 워어어 워어어어 워어어 워어어 워어 워어어 워어어어어 사랑한다 이글스 영원하라 이글스 승리를 향한 함성을 다같이 외쳐 다~ 같~ 이~ 외~ 쳐~", like : 0, vido_url : "https://youtu.be/gX_REHG1MTQ"},
-                {name : "열광", lyrics : "워어어 워어어 워어어어어 워어 워어어어 최! 강! 한! 화! 외쳐라 이글스 승리를 위해 최강한화 이글스 우리들의 함성을 모아 최! 강! 한! 화! 모두 함께 외쳐보자 워어어 워어어 워어어어어 워어 워어어어 최! 강! 한! 화! 외쳐라 이글스 승리를 위해 최강한화 이글스", like : 0, vido_url : "https://youtu.be/9j-6LtiEQJY"}
-            ];
-            res.send(data);
-        }else if(type == '두산 베어스'){
-            let data = [
-                {name : "승리의 두산", lyrics : "두산 그대의 이름은 승리~ 두산 그이름 영원한 베어스~ 가슴을 펴라 이제 우리가 간다 영원한 승리를 위하여~ 짝짝 짝짝짝 짝짝짝짝 두산! 짝짝 짝짝짝 짝짝짝짝 두산! 짝짝 짝짝짝 짝짝짝짝 두산! 짝짝 짝짝짝 짝짝짝짝 두산! 두산 그대의 이름은 승리~ 두산 그이름 영원한 베어스~ 가슴을 펴라  이제 우리가 간다 영원한 승리를 위하여~ 영원한 승리를 위하여~", like : 0, vido_url : "https://www.youtube.com/watch?v=s1k0MPHdJWo"},
-                {name : "챔피언 두산", lyrics : "오오오오오오~ 최강! 오오오오오오~ 두산! 승리를 위해~ 승리를 향해 ~ 뛰어~ 최!강!두!산! 오오오오오오~ 최강! 오오오오오오~ 두산! 승리를 위해~ 승리를 향해 ~ 뛰어~ 최!강!두!산! 오오오오오오~ 최강! 오오오오오오~ 두산! 승리를 위해~ 승리를 향해 ~ 뛰어~ 최!강!두!산!", like : 0, vido_url : "https://www.youtube.com/watch?v=ctI_7RK2Bno"},
-                {name : "라랄라 두산 베어스", lyrics : "빰!빰! 두산! 빰!빰! 베어스! 빰!빰! 두산! 빰!빰! 베어스! 라랄라라 라랄라라 베어스~ 빰!빰! 두산! 빰!빰! 두산! 라랄라라 라랄라라 베어스~ 빰!빰! 두산! 빰!빰! 두산! 라랄라라 라랄라라 베어스~ (두산!) 빰!빰! 두산! 빰!빰! 두산!", like : 0, vido_url : "https://www.youtube.com/watch?v=81oAnZquK0Q"},
-                {name : "최강두산 승리하라", lyrics : "최강두산 오오오~ 승리하라 오오오~ 최강두산 오오오~ 다 하나되어 허슬두 화이팅! 최강두산 오오오~ 승리하라 오오오~ 최강두산 오오오~ 다 하나되어 허슬두 화이팅! 짝짝 짝짝짝 짝짝짝짝 두산! 짝짝 짝짝짝 짝짝짝짝 두산! 짝짝 짝짝짝 짝짝짝짝 두산! 짝짝 짝짝짝 짝짝짝짝 두산! 최강두산 오오오~ 승리하라 오오오~ 최강두산 오오오~ 다 하나되어 허슬두 화이팅! 최강두산 오오오~ 승리하라 오오오~ 최강두산 오오오~ 다 하나되어 허슬두 화이팅! 하나되어 허슬두 화이팅! 하나되어 허슬두 화이팅!", like : 0, vido_url : "https://www.youtube.com/watch?v=rdypuB4eg7s"},
-                {name : "야야야 두산!", lyrics : "짝짝 짝짝짝 짝짝짝짝 두산! 짝짝 짝짝짝 짝짝짝짝 두산! 야 야야 야야야~ 두산! 야 야야 야야야~ 두산! 야 야야 야야 야 야야 야야 야 야야 야야야~ 두산! 달려 달려 나가자 으쌰 으쌰 베어스 싸워 싸워 이기자 두산 베어스 왔어 왔어 우리가 왔어 허슬두! 왔어 왔어 우리가 왔어 허슬두! 야 야야 야야야~ 두산! 야 야야 야야야~ 두산! 야 야야 야야 야 야야 야야 야 야야 야야야~ 두산! 마지막 순간까지 우린 해낼수 있다 소리 높여 부르자 두산 베어스~ 야야야!", like : 0, vido_url : "https://www.youtube.com/embed/-yOrqWL5-ek"}
-            ];
-            res.send(data);
-        }else if(type == 'LG 트윈스'){
-            let data = [
-                {name : "승리의 노래", lyrics : "오오오오오 오오오오오 오오오오오 오오오오오 승리의 함성을 다같이 외쳐라 LG의 승리를 위하여 승리의 함성을 다같이 외쳐라 LG의 승리를 위하여 오오오오오 오오오오오 오오오오오 오오오오오 승리의~ 함성을~ 다같이~ 외쳐라~ LG의~ 승리를~ 위~~하여~ 승리의 함성을 다같이 외쳐라 LG의 승리를 위~하여 오오오오오 오오오오오 오오오오오 오오오오오 오오오오오오", like : 0, vido_url : "https://youtu.be/CeGiBg9eXG0"},
-                {name : "서울의 아리아", lyrics : "오오오오오~오 오오오오오 오 오오오오~오 오오오오오 우리들의 함성을 여기에 모~아 외~쳐라 무적 LG! 자 승리하라 LG! LG의 승리 위해 다 함께 외쳐라! 외~쳐라 무적 LG! 자 승리하라 LG! LG의 승리 위해 다 함께 외쳐라! 무! 적! L! G! 오오오오오~오 오오오오오 오 오오오오~오 오오오오오 우리들의 함성을 여기에 모~아 외~쳐라 무적 LG! 자 승리하라 LG! LG의 승리 위해 다 함께 외쳐라! 외~쳐라 무적 LG! 자 승리하라 LG! LG의 승리 위해 다 함께 외쳐라! LG의 승리 위해 다 함께 외쳐라!", like : 0, vido_url : "https://youtu.be/VcYP02oXyhY"},
-                {name : "LG 없이는 못살아", lyrics : "LG 없이는 못살아 LG 없이는 못살아 LG 없이는 못살아 정말정말 못살아 LG 없이는 못살아 LG 없이는 못살아 LG 없이는 못살아 정말정말 못살아", like : 0, vido_url : "https://youtu.be/QQNMYoZNCUk"},
-                {name : "사랑한다 LG", lyrics : "사랑한~다 LG 사랑한~다 LG 서울의 LG 승리를 위해 노래부르자~ 사랑한~다 LG 사랑한~다 LG 서울의 LG 승리를 위해 노래부르자~", like : 0, vido_url : "https://youtu.be/DkMjUaEwa20"},
-                {name : "최후의 결투", lyrics : "오오 비상하라 오오 승리하라 서울의 LG 승리를위해 오 오 오오오오오 다 같이 외쳐라 우리의 함성을 서울의 LG 승리를 위해 오 오 오오오오오 오오 비상하라 서울의 LG 승리를위해 오 오 오오오오오", like : 0, vido_url : "https://youtu.be/IOY-Qihm1Ls"}
-            ];
-            res.send(data);
-        }else if(type == 'KIA 타이거즈'){
-            let data = [
-                {name : "기아 없이는 못살아", lyrics : "정말정말 못 살아~ 기아 없이는 못살아~ 기아 없이는 못살아~ 기아 없이는 못살아~ 정말정말 못살아~ 기아 없이는 못살아~ 기아 없이는 못살아~ 기아 없이는 못살아~ 정말정말 못살아~ ", like : 0, vido_url : "https://youtu.be/6RiMyqT3_t0"},
-                {name : "사랑한다 KIA", lyrics : "워어워~ 워어워~ 미치도록 사랑한다 기아타이거즈~ 워어워~ 워어워~ 미치도록 사랑한다 기아타이거즈~ 최! 강! 기! 아! 사랑한다 기아~ 사랑한다 기아~ 미치도록 사랑한다 기아타이거즈~ 사랑한다 기아~ 사랑한다 기아~ 미치도록 사랑한다 기아타이거즈~ 최! 강! 기! 아! 타! 이 !거! 즈! 미!치!도!록!사!랑!한!다! 워어워~ 워어워~ 미치도록 사랑한다 기아타이거즈~ 워어워~ 워어워~ 미치도록 사랑한다 기아타이거즈~", like : 0, vido_url : "https://youtu.be/cGs5swSDvJ8"},
-                {name : "영원하리라 KIA타이거즈", lyrics : "워어어어어어 어어어~ 워어어어어어 기아 타이거즈~ 워어어어어 어어어 영원한 승리의 기아 타이거즈~ 기! 아! 타이거즈! 우리 함께 하리라 승리를 향해 가리라 소리높여 외쳐보자 최강 기아 무적 타이거즈 거친 그라운드 위를 누비며 뛰어라 일어나 함께 외쳐봐~ 기아 타이거즈! 워어어어어어 어어어~ 영원한 승리의 기아타이거즈 워어어어어어 어어어~ 무적의 그이름 기아타이거즈~ 영~원~하~리~~라~! 기아타이거즈!", like : 0, vido_url : "https://youtu.be/d9ulphHCWSs"},
-                {name : "광주의 함성", lyrics : "오오오오오 승리의 이름 최강! KIA! 타이거즈! 외쳐라~ 오오오오오 광주의 함성 최강! KIA! 타이거즈! 이겨라~ 오오오오오 승리의 이름 최강! KIA! 타이거즈! 외쳐라~ 오오오오오 광주의 함성 최강! KIA! 타이거즈! 이겨라~ KIA~ 최! 강! 기! 아! 최! 강! 기! 아! 최! 강! 기! 아! 최! 강! 기! 아! 오오오오오 승리의 이름 최강! KIA! 타이거즈! 외쳐라~ 오오오오오 광주의 함성 최강! KIA! 타이거즈! 이겨라~ KIA~", like : 0, vido_url : "https://youtu.be/iTPWsq1msBU"},
-                {name : "최강 기아를 위해", lyrics : "최강기아를 위해 승리의 노래를 불러라 최강기아를 위해 승리의 함성을 외쳐라 최강기아를 위해 승리의 노래를 불러라 최강기아를 위해 승리의 함성을 외쳐라 그대 뜨거운 가슴에 최강기아를 새겨라 그대 뜨거운 가슴에 타이거즈를 새겨라 뜨거운 열정으로 다함께 불러보자 뜨거운 열정으로 다함께 외쳐보자 최강기아를 위해 승리의 노래를 불러라 최강기아를 위해 승리의 함성을 외쳐라 최강기아를 위해 승리의 노래를 불러라 최강기아를 위해 승리의 함성을 외쳐라 그대 뜨거운 가슴에 최강기아를 새겨라 그대 뜨거운 가슴에 타이거즈를 새겨라 뜨거운 열정으로 다함께 불러보자 뜨거운 열정으로 다함께 외쳐보자 최강기아를 위해 승리의 노래를 불러라 최강기아를 위해 승리의 함성을 외쳐라 최강기아를 위해 승리의 노래를 불러라 최강기아를 위해 승리의 함성을 외쳐라", like : 0, vido_url : "https://youtu.be/aSoo8TlAxnU"}
-                
-            ];
-            res.send(data);
-        }else if(type == '롯데 자이언츠'){
-            let data = [
-                {name : "부산 갈매기", lyrics : "빠바바빠바밤~ 빠바바빠바밤~ 빠바바빰빰빰~ 지금은 그 어디서 내 생각 잊었는가 꽃처럼 어여쁜 그 이름도 고왔던 순이 순이야 파도치는 부둣가에 지나간 일들이 가슴에 남았는데 부산 갈~매기~ 부산 갈~매기~너는 정녕 나를 잊었나 빠바바빠바밤~ 빠바바빠바밤~ 빠바바빰빰빰~", like : 0, vido_url : "https://youtu.be/V0b9WKYZ59s"},
-                {name : "돌아와요 부산항에", lyrics : "꽃 피는 동백섬에 봄이 왔건만 형제 떠난 부산항에 갈매기만 슬피 우네 오륙도 돌아가는 연락선마다 목메어 불러봐도 대답 없는 내 형제여 돌아와요 부산항에 그리운 내 형제여", like : 0, vido_url : "https://youtu.be/62jAw0CHZKA"},
-                {name : "승리를 외치자", lyrics : "승리를 외치자~ 최강 롯데 자이언츠 오오 오오 오오오~ 승리를 외치자~ 최강 롯데 자이언츠 오오 오오 오오오~ 승리의 그 이름 최강 롯데 자이언츠 우리는 언제나 외친다 승리를 외치자~ 최강 롯데 자이언츠 오오 오오 오오오~ 최!강!롯!데! 승!리!한!다! 최!강!롯!데! 승!리!한!다! 승리를 외치자~ 최강 롯데 자이언츠 오오 오오 오오오~ 승리를 외치자~ 최강 롯데 자이언츠 오오 오오 오오오~", like : 0, vido_url : "https://youtu.be/plu0zWSZi0o"},
-                {name : "힘차게 외쳐보자", lyrics : "롯데 자이언츠 롯데 자이언츠 롯데 자이언츠~ 오오오~ 다같이 소리 높여 힘차게 외쳐보자 롯데의 승리 위하여~ 다같이 소리 높여 힘차게 외쳐보자 롯데의 승리 위하여~ 워~워~워~ 워~워~워~ 롯데 yeah! 롯데 yeah! 롯데 yeah! 롯데 자이언츠 롯데 자이언츠 롯데 자이언츠~ 오오오~ 롯데 자이언츠 롯데 자이언츠 롯데 자이언츠~ 오오오~ 다같이 소리 높여 힘차게 외쳐보자 롯데의 승리 위하여~", like : 0, vido_url : "https://youtu.be/RWglJ4EEmyU"},
-                {name : "오~ 최강롯데", lyrics : "승리를 위하여 다함께 외쳐라 우리 모두 최강 롯데 자이언츠 승리를 위하여 다함께 외쳐라 우리 모두 최강 롯데 자이언츠 오~ 최강 롯데~ 오~ 최강 롯데~ 오~ 최강 롯데~ 오~ 최강 롯데~ 라라라 라라라 라라라 라라라 우리 모두 최강 롯데 자이언츠 롯데!  자이언츠! 롯데! 자이언츠! 오~ 최강 롯데~ 오~ 최강 롯데~ 오~ 최강 롯데~ 오~ 최강 롯데~ 라라라 라라라 라라라 라라라 우리 모두 최강 롯데 자이언츠 오~ 최강 롯데~ 오~ 최강 롯데~ 오~ 최강 롯데~ 오~ 최강 롯데~ 라라라 라라라 라라라 라라라 우리 모두 최강 롯데 자이언츠", like : 0, vido_url : "https://youtu.be/PbVT6XRN_R8"}
-            ];
-            res.send(data);
-        }else if(type == '키움 히어로즈'){
-            let data = [
-                {name : "기를 높여라", lyrics : "우리가 원하는 건~ 오오오 오오오 오오오~ 히어로즈의 영원한 승리~ 오오오 오오오 오오오~ 우리가 원하는 건~ 오오오 오오오 오오오~ 히어로즈의 영원한 승리~ 오오오 오오오 오오오~", like : 0, vido_url : "https://youtu.be/CdXdgZDMvTU"},
-                {name : "오 키움, 키움 히어로즈", lyrics : "전진하라 가슴펴고 싸우자 당당하게 승리를 위해 외쳐 키움 키움 히어로즈 전진하라 가슴펴고 싸우자 당당하게 승리를 위해 외쳐 키움 키움 히어로즈 키! 움! 히! 어! 로! 즈! 승! 리! 한! 다! 키! 움! 히! 어! 로! 즈! 승! 리! 한! 다! 전진하라 가슴펴고 싸우자 당당하게 승리를 위해 외쳐 키움 키움 히어로즈 전진하라 가슴펴고 싸우자 당당하게 승리를 위해 외쳐 키움 키움 히어로즈", like : 0, vido_url : "https://music.youtube.com/watch?v=Fu3LgpXU9CA"},
-                {name : "하늘 끝까지", lyrics : "가슴 속에 영원히 남을 그 이름 히어로즈여 기억 하라 뜨거운 땀과 열정의 히어로즈여 하늘 끝까지 승리를 외쳐 소리쳐라 히어로 하늘 끝까지 승리를 외쳐 소리쳐라 짝짝짝 짝짝 짝짝짝 짝짝 히!어!로!즈! 짝짝짝 짝짝 짝짝짝 짝짝 히!어!로!즈! 가슴 속에 영원히 남을 그 이름 히어로즈여 기억 하라 뜨거운 땀과 열정의 히어로즈여 하늘 끝까지 승리를 외쳐 소리쳐라 히어로 하늘 끝까지 승리를 외쳐 소리쳐라 하늘 끝까지 승리를 외쳐 소리쳐라 히어로 하늘 끝까지 승리를 외쳐 소리쳐라 히 어 로 즈~", like : 0, vido_url : "https://youtu.be/PvqICHL1hl8"},
-                {name : "우리가 승리한다", lyrics : "우리 모두 하나가 되어 히어로즈 함께 외쳐라 히어로즈의 승리를 위하여 하나 되어 외쳐 보리라 히어로즈의 승리를 위하여 우리 모두 외쳐 보리라 우리 모두 하나가 되어 히어로즈 함께 외쳐라 히어로즈의 승리를 위하여 하나 되어 외쳐 보리라 히어로즈의 승리를 위하여 우리 모두 외쳐 보리라 히! 어! 로! 즈! 승! 리! 한! 다! 우리 모두 하나가 되어 히어로즈 함께 외쳐라 히어로즈의 승리를 위하여 하나 되어 외쳐 보리라 히어로즈의 승리를 위하여 우리 모두 외쳐 보리라", like : 0, vido_url : "https://youtu.be/DqiP4UvS7CQ"},
-                {name : "꿈이여 하나가 되자", lyrics : "꿈이여 하나가 되자 오랫동안 참고 지낸 우리들 너와 나 하나가 되자 기다리던 시간들은 끝났다 돌고 도는 서글픈 인생 잿빛이 된 하늘 위엔 태양이 우릴 위해 너를 위해 다시 한번 타오르며 솟는다 망설이다 주저앉는 지친 날개여 눈을 떠라 눈을 떠 영웅이여 우린 보려 한다 너의 모습을 다시 한 번 타오르라 나의 형제여 헤이 헤이 일어나 달려 나가자 헤이 헤이 싸워라 너의 내일에 하늘 위로 날아올라 별이 되리라 보라 기억하라 그 이름 서울 히어로즈", like : 0, vido_url : "https://youtu.be/jFkiL_xb5aU"}
-            ];
-            res.send(data);
-        }else if(type == 'SSG 랜더스'){
-            let data = [
-                {name : "랜더스여", lyrics : "We are 랜더스 파이팅 우리의 함성을 하나로 모아 달려가자 승리를 향해 나가자 우리의 랜더스여~ 워어어 We are 랜더스 파이팅 우리의 열정을 하나로 모아 날아올라 정상을 향해 나가자 우리의 랜더스여~We are 랜더스 파이팅 우리의 열정을 하나로 모아 날아올라 정상을 향해 나가자 우리의 랜더스여~우리의 랜더스여~", like : 0, vido_url : "https://youtu.be/baseGQapOf0"},
-                {name : "투혼의 랜더스", lyrics : "투혼의 랜더스~ 오오오 오오오 승리를 위하여~ 오오오오 투혼의 랜더스~ 오오오 오오오 승리를 위하여 We Are The One~ 인!천!S!S!G! 인!천!S!S!G! 투혼의 랜더스~ 오오오 오오오 승리를 위하여~ 오오오오 투혼의 랜더스~ 오오오 오오오 승리를 위하여 We Are The One~ 승리를 위하여 We Are The One~", like : 0, vido_url : "https://youtu.be/WlMujqD6EYs"},
-                {name : "승리를 외쳐라", lyrics : "오오 오오 오오 오오오~ 랜더스 승리를 외쳐라~ 오오 오오 오오 오오오~ 인천의 SSG~ 오오 오오 오오 오오오~ 랜더스 승리를 외쳐라~ 오오 오오 오오 오오오~ 인천의 SSG~ 우리 하나된 소리로~ 랜더스 승리를 외쳐라~ 우리 하나된 소리로~ 인천의 SSG~ 오오 오오 오오 오오오~ 랜더스 승리를 외쳐라~ 오오 오오 오오 오오오~ 인천의 SSG~ 우리 하나된 소리로~ 랜더스 승리를 외쳐라~ 우리 하나된 소리로~ 인천의 SSG~", like : 0, vido_url : "https://youtu.be/IktjkWNNcjw"},
-                {name : "랜더스의 승리위해", lyrics : "랜더스의 승리위해~ 다 같이 외쳐라~ 랜더스의 승리위해~ 다 같이 외쳐라~ 워워워워~ 워워~ 워워워워~ 워워~ 워워워워~ 워워~ 인! 천! S! S! G! 워워워워~ 워워~ 워워워워~ 워워~ 워워워워~ 워워~ 인! 천! S! S! G! 워워워워~ 워워~ 워워워워~ 워워~ 워워워워~ 워워~ 인! 천! S! S! G! 워워워워~ 워워~ 워워워워~ 워워~ 워워워워~ 워워~ 인! 천! S! S! G!", like : 0, vido_url : "https://youtu.be/Q6ckRDOKYKk"},
-                {name : "외쳐라 랜더스", lyrics : "하나 된 함성 소리 더 뜨겁게 외쳐라 오오 승리를 위한 함성 우린 랜~더스 랜~더스 하나 된 함성 소리  더 뜨겁게 외쳐라 오오 승리를 위한 함성 우린 랜~더스 랜~더스 오 오오 오 오오 오 더 뜨겁게 외쳐라 오오 승리를 위한 함성 우린 랜~더스 랜~더스", like : 0, vido_url : "https://youtu.be/3CLqlpoypI0"}
-            ];
-            res.send(data);
-        }else if(type == 'NC 다이노스'){
-            let data = [
-                {name : "위하여", lyrics : "외쳐라 NC여~ 다이노스의 승리 위하여~ 우리에 다이노스의 승리를 위하여~ 외쳐라 NC여~ 다이노스의 승리 위하여~ 우리에 다이노스의 승리를 위하여~ 외쳐라 NC여~ 다이노스의 승리 위하여~ 우리에 다이노스의 승리를 위하여~ 외쳐라 NC여~ 다이노스의 승리 위하여~ 우리에 다이노스의 승리를 위하여~", like : 0, vido_url : "https://youtu.be/QmgeKEe-LEE"},
-                {name : "NC를 위하여", lyrics : "NC! NC! NC! 창원 NC! 당당히 일어나라~ 오오오 우리가 함께~한다 오오오 뜨거운 함성 모아 오오오 승리를 외쳐보자~ 창원 NC! 오오오 오오오 오~ 승리의 그 이름 NC 오오오 오오오 오~ 영원히 함께할 NC 창원 NC! 오오오 오오오 오~ 승리의 그 이름 NC 오오오 오오오 오~ 영원히 함께할 NC 창원 NC!", like : 0, vido_url : "https://youtu.be/_g7Lr4QP9xM"},
-                {name : "외쳐라 다이노스", lyrics : "외쳐라 다이노스 끝없는 하늘에 오늘의 승리를 새겨라 외쳐라 다이노스 끝없는 하늘에 오늘의 승리를 새겨라 다이노스 워어어어어 다이노스 워어어어어 다이노스 워어어어어 다이노스 워어어어어 다이노스 워어어어어 다이노스 워어어어어 다이노스 워어어어어 다이노스 워어어어어", like : 0, vido_url : "https://youtu.be/_g7Lr4QP9xM"},
-                {name : "챔피언 NC", lyrics : "워어어 워어어어어 워어어 워어어어어 승리를 향해 NC 모두 일어나 외쳐라 다이노스 폭풍처럼 달려라 승! 리! 를! 향!해! N! C! 달려라 날아올라 승리를 향해 NC 모두 일어나 외쳐라 다이노스NC는 승리하리라 NC는 승리하리라", like : 0, vido_url : "https://youtu.be/_g7Lr4QP9xM"},
-                {name : "미친 듯 놀자", lyrics : "NC 다이노스 놀자~ NC 다이노스 놀자~ NC! NC! NC! 자 거침없이~ NC 다이노스 놀자~ NC 다이노스 놀자~ NC! NC! NC! 자 거침없이~ 여기는 다이노스 뜨거운 창원 NC 파크! 워우워~ 이 시간 다같이 즐기자고~ 다이노스! 예이예이예이예이예~ NC! 예이예이예이예이예~ NC! 일어나 모두 너랑 나랑 미친 듯 놀자! 예이예이예이예이예~ NC! 예이예이예이예이예~ NC! 일어나 모두 너랑 나랑 미친 듯 놀자!", like : 0, vido_url : "https://youtu.be/_g7Lr4QP9xM"}
-            ];
-            res.send(data);
-        }else if(type == 'kt wiz'){
-            let data = [
-                {name : "Don't stop KT", lyrics : "나 나나나나나 나나나나 나나나나 나나나 외쳐라 kt wiz 워어 하나되어 워우워 Don't stop KT Don't stop KT 승리하라 kt wiz 워우워 kt wiz 열광하라 kt wiz 워우워 kt wiz 워우워 kt wiz 워어 kt wiz 하나되어 외쳐봐 하나되어 외쳐라 승리하라 kt wiz 화이팅 kt wiz 외쳐! 더 크게 외쳐 kt wiz 외쳐! 더 크게 외쳐 kt wiz! kt wiz! 워우워우워", like : 0, vido_url : "https://youtu.be/vzsDodd6Xew"},
-                {name : "kt wiz 영원하리라", lyrics : "k! t! 위! 즈! 영! 원! 하! 라! kt wiz 영원하리라 kt wiz 워어어어어어 kt wiz 영원하리라 kt wiz 워어어어어 K! T! 위! 즈! 영! 원! 하! 라! kt wiz 영원하리라 kt wiz 워어어어어어 kt wiz 영원하리라 kt wiz 워어어어어", like : 0, vido_url : "https://youtu.be/CuvZfdJP1iA"},
-                {name : "KT의 승리 위해", lyrics : "K! T! 위! 즈! 워~ 워~ 워어어~ 워~ K~ T의 승리 위~해 승~ 리~ 하라~ 오! 수원 kt wiz 워어~ 워~ 워어어~ 워~ K~ T의 승리 위~ 해 승~ 리~ 하라~ 오! 수원 kt wiz 워어~ 워~ 워어어~ 워~ K~ T의 승리 위~ 해 K! T! 위! 즈! 승! 리! 한! 다! K! T! 위! 즈! 승! 리! 한! 다! 승~ 리~ 하라~ 오! 수원 kt wiz 워어~ 워~ 워어어~ 워~ K~ T의 승리 위~ 해", like : 0, vido_url : "https://youtu.be/MTQzXVu_S4g"},
-                {name : "Let's go kt wiz", lyrics : "승리 향해 외쳐라 Let’s go kt wiz 하나 되어 외쳐라 Let’s go kt wiz 아아아~ 아아~ 아아 아~ 아아아 승리 향해 외쳐보자 Let’s go kt wiz! 아아아~ 아아~ 아아 아~ 아아아 하나 되어 외쳐라 Let’s go kt wiz! 아아아~ 아아~ 아아 아~ 아아아 승리 향해 외쳐보자 Let’s go kt wiz! 아아아~ 아아~ 아아 아~ 아아아 하나 되어 외쳐라 Let’s go kt wiz!", like : 0, vido_url : "https://youtu.be/KlIsU2Vhm3Q"},
-                {name : "나의 사랑 kt wiz", lyrics : "승리하라 kt wiz 열광하라 kt wiz 나의 사랑 kt wiz 워어어어 어어어 승리하라 kt wiz 열광하라 kt wiz 나의 사랑 kt wiz 워어어어 어어어 Let's go together! We are the kt wiz! 승리하라 열광하라 나의 사랑 KT 승리하라 kt wiz 열광하라 kt wiz 나의 사랑 kt wiz 워어어어 어어어 승리하라 kt wiz 열광하라 kt wiz 나의 사랑 kt wiz 워어어어 어어어", like : 0, vido_url : "https://youtu.be/N0aW-qIIrNM"}
-            ];
-            res.send(data);
-        }else{
-            res.send('Type is not correct.');
+router.get('/:apikey', async (req, res) => {
+    try {
+        const { apikey } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
         }
+
+        const cheerSong = await CheerSong.findAll();
+
+        if (cheerSong.length > 0) {
+            res.status(200).json(cheerSong);
+        } else {
+            res.status(404).send('No homegrounds found.');
+        }
+    } catch (error) {
+        console.error('Error fetching homegrounds:', error);
+        res.status(500).send('Failed to fetch homegrounds');
     }
 });
 
-// app.js에서 사용할 수 있도록 내보냄
+
+router.get('/:apikey/:id', async (req, res) => {
+    try {
+        const { apikey, id } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        const baseballHomeground = await BaseballHomeground.findByPk(id);
+        const homeground_id = id;
+        const baseballHomegroundParking = await BaseballHomegroundParking.findAll({where: {homeground_id}});
+
+        if (baseballHomeground) {
+            baseballHomeground.parking = baseballHomegroundParking;
+            res.status(200).json(baseballHomeground);
+            
+        } else {
+            res.status(404).send('homeground not found.');
+        }
+    } catch (error) {
+        console.error('Error fetching homeground:', error);
+        res.status(500).send('Failed to fetch homeground');
+    }
+});
+
+
 module.exports = router;

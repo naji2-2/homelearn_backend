@@ -1,47 +1,41 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    const FoodShop = sequelize.define('FoodShop', {
+    const CheerSong = sequelize.define('CheerSong', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false,
         },
-        homeground: {
-            type: DataTypes.STRING(255),
+        TeamId: {  
+            type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: 'baseball_team',
+                key: 'id'
+            }
         },
         name: {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        menu: {
+        lyrics: {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        category: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-        },
-        today_order: {
+        like: {
             type: DataTypes.INTEGER,
-            defaultValue: 0,
             allowNull: false,
         },
-        star: {
-            type: DataTypes.FLOAT,
-            defaultValue: 0,
-            allowNull: false,
-        },
-        location: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
+        video_url: {
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     }, {
-        tableName: 'food_shop',
+        tableName: 'cheer_song',
         timestamps: true,
         underscored: true,
     });
-    return FoodShop;
+    return CheerSong;
 };

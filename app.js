@@ -5,14 +5,13 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
-const initializeData = require('./config/initializeData');
 //설치한 미들웨어 및 모듈  불러오기
 dotenv.config();
 
 const app = express();
 
 // 라우터 설정
-const BaseballTeamRouter = require('./routes/baseball_team_api');
+const BaseballTeam = require('./routes/baseball_team_api');
 const BaseballHomegroundInfoRouter = require('./routes/baseball_homeground_info_api');
 const BaseballCommunityPostRouter = require('./routes/baseball_community_post_api');
 const BaseballHomegroundParkingRouter = require('./routes/baseball_homeground_parking_api');
@@ -44,8 +43,8 @@ app.use(session({
 
 
 // routes 만든 라우터 불러오기
-app.use('/api/teams', BaseballTeamRouter);
-app.use('/api/homegrounds', BaseballHomegroundInfoRouter);
+app.use('/api/team', BaseballTeam);
+app.use('/api/homeground', BaseballHomegroundInfoRouter);
 app.use('/api/parking', BaseballHomegroundParkingRouter);
 app.use('/api/posts', BaseballCommunityPostRouter);
 app.use('/api/foodshop', FoodShop);
@@ -67,7 +66,7 @@ const port = app.get('port'); // 설정된 포트 가져오기
 
 app.listen(port, async () => {
     try {
-        await initializeData(); // 데이터베이스 초기화
+        //await initializeData(); // 데이터베이스 초기화
         //await syncDatabase(); // 수정: 데이터베이스 동기화 추가
         console.log(`${port}번 포트에서 대기 중`);
     } catch (error) {
