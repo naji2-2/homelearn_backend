@@ -12,13 +12,19 @@ const sequelize = new Sequelize('homelearn', 'root', process.env.MYSQL_PASSWORD,
 // 모델 가져오기
 const BaseballCommunityPost = require('../models/baseball_community_post_model.js')(sequelize);
 const FoodShop = require('../models/food_shop_model.js')(sequelize);
+const FoodShopMenu = require('../models/food_shop_menu_model.js')(sequelize);
+const BaseballTeam = require('../models/baseball_team_model.js')(sequelize);
+const BaseballHomegroundInfo = require('../models/baseball_homeground_info_model.js')(sequelize);
+const BaseballHomegroundParking = require('../models/baseball_homeground_parking_model.js')(sequelize);
+const CheerSong = require('../models/cheer_song_model.js')(sequelize);
+
+
 
 const syncModels = async () => {
     try {
         await sequelize.authenticate(); // 데이터베이스 연결 확인
         console.log('데이터베이스 연결 성공');
 
-        // 테이블이 없으면 새로 생성하고, 있으면 삭제하고 새로 생성
         await sequelize.sync({ alter: true });
         console.log('모델 동기화 성공');
     } catch (err) {

@@ -3,6 +3,7 @@
 const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
 const FoodShop = require('../models/food_shop_model.js')(require('../config/db'));
+const FoodShopMenu = require('../models/food_shop_menu_model.js')(require('../config/db'));
 
 const router = express.Router();
 
@@ -23,6 +24,11 @@ router.get('/:apikey', async (req, res) => {
 
         // 모든 음식점 정보 조회
         const foodShops = await FoodShop.findAll();
+
+        for (const foodShop of foodShops) {
+            const foodShopMenuList = await FoodShopMenu.findAll({ where: { shop_id: foodShop.id } });
+            foodShop.menu = foodShopMenuList;
+        }
 
         if (foodShops.length > 0) {
             res.status(200).json(foodShops);
@@ -47,9 +53,13 @@ router.get('/:apikey/:id', async (req, res) => {
 
         // 특정 음식점 정보 조회
         const foodShop = await FoodShop.findByPk(id);
+        const shop_id = id;
+        const foodShopMenuList = await FoodShopMenu.findAll({where: {shop_id}});
 
         if (foodShop) {
+            foodShop.menu = foodShopMenuList;
             res.status(200).json(foodShop);
+            
         } else {
             res.status(404).send('Food shop not found.');
         }
@@ -73,6 +83,11 @@ router.get('/:apikey/homeground/:homeground', async (req, res) => {
         const foodShops = await FoodShop.findAll({
             where: { homeground: homeground }
         });
+
+        for (const foodShop of foodShops) {
+            const foodShopMenuList = await FoodShopMenu.findAll({ where: { shop_id: foodShop.id } });
+            foodShop.menu = foodShopMenuList;
+        }
 
         if (foodShops.length > 0) {
             res.status(200).json(foodShops);
