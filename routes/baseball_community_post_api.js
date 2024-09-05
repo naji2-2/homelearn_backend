@@ -1,6 +1,6 @@
 const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
-
+const BaseballCommunityPost = require('../models/baseball_community_post_model.js')(require('../config/db'));
 const router = express.Router();
 
 
@@ -9,7 +9,6 @@ const key = {
     uuid: '36f77065-60fa-4b4a-90db-f2a02be13f34'
 }
 
-const { BaseballCommunityPost } = require('../models/baseball_community_post_model.js');
 
 router.use('/:apikey', (req, res, next) => {
     const { apikey } = req.params;
@@ -21,8 +20,8 @@ router.use('/:apikey', (req, res, next) => {
 
 
 // POST /posts - 새로운 게시물 작성
-router.post('/:apikey/:id', async (req, res) => {
-    let {apikey, id} = req.params;
+router.post('/:apikey', async (req, res) => {
+    let {apikey} = req.params;
     try {
         const { user_id, baseball_community_id, title, content, image_url } = req.body;
         const newPost = await BaseballCommunityPost.create({
@@ -34,6 +33,7 @@ router.post('/:apikey/:id', async (req, res) => {
         });
         res.status(201).json(newPost);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: '게시물 생성 중 오류가 발생했습니다.' });
     }
 });

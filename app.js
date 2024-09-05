@@ -46,7 +46,7 @@ app.use(session({
 app.use('/api/team', BaseballTeam);
 app.use('/api/homeground', BaseballHomegroundInfoRouter);
 app.use('/api/parking', BaseballHomegroundParkingRouter);
-app.use('/api/posts', BaseballCommunityPostRouter);
+app.use('/api/post', BaseballCommunityPostRouter);
 app.use('/api/foodshop', FoodShop);
 app.use('/api/foodshopreview', FoodShopReview);
 app.use('/api/cheersong', CheerSong);
