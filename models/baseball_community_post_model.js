@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    const BaseballCommunityPost = sequelize.define('FoodShop', {
+    const BaseballCommunityPost = sequelize.define('BaseballCommunityPost', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
