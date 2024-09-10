@@ -11,10 +11,11 @@
   "dependencies": {
     "api": "^6.1.2",
     "api.js": "^0.0.5",
+    "axios": "^1.7.7",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "express-session": "^1.18.0",
     "module": "^1.2.5",
     "morgan": "^1.10.0",

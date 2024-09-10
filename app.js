@@ -13,7 +13,8 @@ const app = express();
 // 라우터 설정
 const BaseballTeam = require('./routes/baseball_team_api');
 const BaseballHomegroundInfoRouter = require('./routes/baseball_homeground_info_api');
-const BaseballCommunityPostRouter = require('./routes/baseball_community_post_api');
+const BaseballCommunityPost = require('./routes/baseball_community_post_api');
+const BaseballCommunityPostComment = require('./routes/baseball_community_post_comment_api');
 const BaseballHomegroundParkingRouter = require('./routes/baseball_homeground_parking_api');
 const FoodShop = require('./routes/food_shop_api');
 const FoodShopOrder = require('./routes/food_shop_order_api');
@@ -46,8 +47,9 @@ app.use(session({
 // routes 만든 라우터 불러오기
 app.use('/api/team', BaseballTeam);
 app.use('/api/homeground', BaseballHomegroundInfoRouter);
-app.use('/api/parking', BaseballHomegroundParkingRouter);
-app.use('/api/post', BaseballCommunityPostRouter);
+app.use('/api/homegroundparking', BaseballHomegroundParkingRouter);
+app.use('/api/post', BaseballCommunityPost);
+app.use('/api/post/comment', BaseballCommunityPostComment);
 app.use('/api/foodshop', FoodShop);
 app.use('/api/foodshoporder', FoodShopOrder);
 app.use('/api/foodshopreview', FoodShopReview);
