@@ -11,6 +11,7 @@ const sequelize = new Sequelize('homelearn', 'root', process.env.MYSQL_PASSWORD,
 
 // 모델 가져오기
 const BaseballCommunityPost = require('../models/baseball_community_post_model.js')(sequelize);
+const BaseballCommunityPostComment = require('../models/baseball_community_post_comment_model.js')(sequelize);
 const FoodShop = require('../models/food_shop_model.js')(sequelize);
 const FoodShopMenu = require('../models/food_shop_menu_model.js')(sequelize);
 const FoodShopOrder = require('../models/food_shop_order_model.js')(sequelize);
