@@ -23,6 +23,7 @@
     "mysql2": "^3.11.0",
     "nodemon": "^3.1.4",
     "path": "^0.12.7",
+    "puppeteer": "^23.3.0",
     "sequelize": "^6.37.3",
     "uuid-apikey": "^1.5.3"
   },
