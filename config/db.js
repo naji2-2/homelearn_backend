@@ -22,7 +22,7 @@ const BaseballHomegroundParking = require('../models/baseball_homeground_parking
 const CheerSong = require('../models/cheer_song_model.js')(sequelize);
 const User = require('../models/user_model.js')(sequelize);
 const BaseballGameSchedule = require('../models/baseball_game_schedule_model.js')(sequelize);
-
+const BaseballTeamMember = require('../models/baseball_team_member_model.js')(sequelize);
 
 const syncModels = async () => {
     try {
