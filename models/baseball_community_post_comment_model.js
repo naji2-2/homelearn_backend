@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         postId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             allowNull: false,
             references: {
                 model: 'baseball_community_post',
