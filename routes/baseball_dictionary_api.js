@@ -1,14 +1,20 @@
 /* 단어 사전 api */
 const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
+const { Op } = require('sequelize');
 const Dictionary = require('../models/baseball_dictionary_model.js')(require('../config/db'));
 
 const router = express.Router();
 
+const key = {
+    apiKey: process.env.API_KEY,
+    uuid: '36f77065-60fa-4b4a-90db-f2a02be13f34'
+};
+
 // 단어 검색
-router.get('/:apikey/:word', async (req, res) => {
+router.get('/:apikey/search/:word', async (req, res) => {
     try {
-        const { apikey } = req.params;
+        const { apikey, search } = req.params;
 
         // API 키 검증
         if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
@@ -29,7 +35,7 @@ router.get('/:apikey/:word', async (req, res) => {
 // 카테고리별 조회
 router.get('/:apikey/category/:category', async (req, res) => {
     try {
-        const { apikey } = req.params;
+        const { apikey, category } = req.params;
 
         // API 키 검증
         if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
@@ -44,9 +50,9 @@ router.get('/:apikey/category/:category', async (req, res) => {
 });
 
 // 단어 상세 정보
-router.get('/:apikey/:id', async (req, res) => {
+router.get('/:apikey/word/:id', async (req, res) => {
     try {
-        const { apikey } = req.params;
+        const { apikey, id } = req.params;
 
         // API 키 검증
         if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
