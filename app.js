@@ -22,7 +22,7 @@ const FoodShopReview = require('./routes/food_shop_review_api');
 const CheerSong = require('./routes/cheer_song_api');
 const BaseballDictionary = require('./routes/baseball_dictionary_api');
 const BaseballGame = require('./routes/baseball_game_schedule_api');
-//const BaseballTeamMember = require('./routes/baseball_team_member_api');
+const BaseballTeamMember = require('./routes/baseball_team_member_api');
 
 app.use(cors());
 
@@ -59,7 +59,7 @@ app.use('/api/foodshopreview', FoodShopReview);
 app.use('/api/cheersong', CheerSong);
 app.use('/api/dictionary', BaseballDictionary)
 app.use('/api/game', BaseballGame);
-//app.use('/api/teammember', BaseballTeamMember);
+app.use('/api/teammember', BaseballTeamMember);
 
 
 
