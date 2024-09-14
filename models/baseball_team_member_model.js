@@ -20,10 +20,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        class: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
         back_number: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -54,11 +50,11 @@ module.exports = (sequelize) => {
         },
         instagram: {
             type: DataTypes.STRING(255),
-            allowNull: false,
+            allowNull: true,
         },
         ceer_song: {
             type: DataTypes.STRING(255),
-            allowNull: false,
+            allowNull: true,
         }
     }, {
         tableName: 'baseball_team_member',
