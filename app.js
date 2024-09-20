@@ -34,6 +34,7 @@ const BaseballDictionary = require('./routes/baseball_dictionary_api');
 const BaseballGame = require('./routes/baseball_game_schedule_api');
 const BaseballTeamMember = require('./routes/baseball_team_member_api');
 const { router: billboardRoutes, setSocketIo } = require('./routes/baseball_community_billboard_api.js'); // 전광판 라우터 불러오기
+const Calendar = require('./routes/calendar_api');
 
 // CORS 설정
 app.use(cors());
@@ -68,6 +69,7 @@ app.use('/api/dictionary', BaseballDictionary);
 app.use('/api/game', BaseballGame);
 app.use('/api/teammember', BaseballTeamMember);
 app.use('/api/billboard', billboardRoutes); // 전광판 라우터 연결
+app.use('/api/calendar', Calendar);
 
 // Socket.IO 설정
 setSocketIo(io); // Socket.IO와 전광판 라우터 연결
