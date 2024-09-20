@@ -25,6 +25,7 @@ const User = require('../models/user_model.js')(sequelize);
 const BaseballGameSchedule = require('../models/baseball_game_schedule_model.js')(sequelize);
 const BaseballTeamMember = require('../models/baseball_team_member_model.js')(sequelize);
 const BaseballDictionary = require('../models/baseball_dictionary_model.js')(sequelize);
+const Calendar = require('../models/calendar_model.js')(sequelize);
 
 const syncModels = async () => {
     try {
@@ -47,6 +48,7 @@ const syncModels = async () => {
         await BaseballGameSchedule.sync({ alter: true });
         await BaseballTeamMember.sync({ alter: true });
         await BaseballDictionary.sync({ alter: true });
+        await Calendar.sync({ alter: true });
 
         console.log('모델 동기화 성공');
     } catch (err) {
