@@ -10,9 +10,13 @@ module.exports = (sequelize) => {
                 key: 'id'
             }
         },
-        userId: {
+        userId: { 
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: true,
+            references: {
+                model: 'user_information',
+                key: 'id'
+            }
         },
         content: {
             type: DataTypes.TEXT,

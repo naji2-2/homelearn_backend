@@ -33,32 +33,4 @@ router.get('/:apikey', async (req, res) => {
     }
 });
 
-
-router.get('/:apikey/:id', async (req, res) => {
-    try {
-        const { apikey, id } = req.params;
-
-        // API 키 검증
-        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-            return res.status(401).send('apikey is not valid.');
-        }
-
-        const baseballHomeground = await BaseballHomeground.findByPk(id);
-        const homeground_id = id;
-        const baseballHomegroundParking = await BaseballHomegroundParking.findAll({where: {homeground_id}});
-
-        if (baseballHomeground) {
-            baseballHomeground.parking = baseballHomegroundParking;
-            res.status(200).json(baseballHomeground);
-            
-        } else {
-            res.status(404).send('homeground not found.');
-        }
-    } catch (error) {
-        console.error('Error fetching homeground:', error);
-        res.status(500).send('Failed to fetch homeground');
-    }
-});
-
-
 module.exports = router;
