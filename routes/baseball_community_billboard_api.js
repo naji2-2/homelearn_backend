@@ -66,6 +66,11 @@ router.post('/update/:apikey', upload.single('image'), (req, res) => {
     // 전광판 데이터 업데이트
     billboard = { image, text };
 
+    // 모든 클라이언트에 업데이트된 전광판 데이터 전송
+    if (io) {
+        io.emit('update_billboard', billboard);
+    }
+
     // 응답
     res.status(200).json({
         message: 'Billboard updated successfully',
