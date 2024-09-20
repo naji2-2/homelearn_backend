@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         },
         teamId: {  
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: 'baseball_team',
                 key: 'id'
@@ -50,7 +50,7 @@ module.exports = (sequelize) => {
         },
         instagram: {
             type: DataTypes.STRING(255),
-            allowNull: true,
+            allowNull: false,
         },
         ceer_song: {
             type: DataTypes.STRING(255),

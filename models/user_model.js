@@ -8,6 +8,14 @@ module.exports = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
+        teamId: {  
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+                model: 'baseball_team',
+                key: 'id'
+            }
+        },
         name: { 
             type: DataTypes.STRING(255),
             required: true 

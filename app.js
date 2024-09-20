@@ -26,7 +26,7 @@ const BaseballTeamMember = require('./routes/baseball_team_member_api');
 
 app.use(cors());
 
-app.set('port', process.env.PORT || 3000); // 3000 대신 3001
+app.set('port', process.env.PORT || 3000); 
 
 //app.set('port,포트) : 서버가 실행될 포트 설정
 
@@ -76,11 +76,9 @@ const port = app.get('port'); // 설정된 포트 가져오기
 
 app.listen(port, async () => {
     try {
-        //await initializeData(); // 데이터베이스 초기화
-        //await syncDatabase(); // 수정: 데이터베이스 동기화 추가
         console.log(`${port}번 포트에서 대기 중`);
     } catch (error) {
         console.error('Error during initialization:', error);
-        process.exit(1); // 초기화 실패 시 프로세스 종료
+        process.exit(1);
     }
 });

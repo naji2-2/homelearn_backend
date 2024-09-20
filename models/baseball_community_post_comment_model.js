@@ -8,9 +8,13 @@ module.exports = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
-        userId: {  // 외래키 설정 필요
+        userId: { 
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
+            references: {
+                model: 'user_information',
+                key: 'id'
+            }
         },
         postId: {
             type: DataTypes.BIGINT,

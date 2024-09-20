@@ -8,9 +8,13 @@ module.exports = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
-        userId: {  // 유저 api 생성 후 포렌키 설정 필요
+        userId: { 
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
+            references: {
+                model: 'user_information',
+                key: 'id'
+            }
         },
         shopId: {  
             type: DataTypes.INTEGER,
