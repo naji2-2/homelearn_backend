@@ -18,14 +18,17 @@
     "dotenv": "^16.4.5",
     "express": "^4.20.0",
     "express-session": "^1.18.0",
+    "fs": "^0.0.1-security",
     "module": "^1.2.5",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
     "nodemon": "^3.1.4",
     "path": "^0.12.7",
     "puppeteer": "^23.3.0",
     "sequelize": "^6.37.3",
+    "socket.io": "^4.7.5",
     "uuid-apikey": "^1.5.3"
   },
   "repository": {

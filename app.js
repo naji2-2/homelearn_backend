@@ -5,10 +5,20 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
-//설치한 미들웨어 및 모듈  불러오기
+const http = require('http');
+const socketIo = require('socket.io');
+
+// dotenv 설정
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+    },
+});
 
 // 라우터 설정
 const BaseballTeam = require('./routes/baseball_team_api');
@@ -23,17 +33,15 @@ const CheerSong = require('./routes/cheer_song_api');
 const BaseballDictionary = require('./routes/baseball_dictionary_api');
 const BaseballGame = require('./routes/baseball_game_schedule_api');
 const BaseballTeamMember = require('./routes/baseball_team_member_api');
+const { router: billboardRoutes, setSocketIo } = require('./routes/baseball_community_billboard_api.js'); // 전광판 라우터 불러오기
 
+// CORS 설정
 app.use(cors());
-
-app.set('port', process.env.PORT || 3000); 
-
-//app.set('port,포트) : 서버가 실행될 포트 설정
-
+app.set('port', process.env.PORT || 3000);
 app.use(morgan('dev'));
-app.use('/',express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
     resave: false,
@@ -46,7 +54,6 @@ app.use(session({
     name: 'session-cookie',
 }));
 
-
 // routes 만든 라우터 불러오기
 app.use('/api/team', BaseballTeam);
 app.use('/api/homeground', BaseballHomegroundInfoRouter);
@@ -57,24 +64,23 @@ app.use('/api/foodshop', FoodShop);
 app.use('/api/foodshoporder', FoodShopOrder);
 app.use('/api/foodshopreview', FoodShopReview);
 app.use('/api/cheersong', CheerSong);
-app.use('/api/dictionary', BaseballDictionary)
+app.use('/api/dictionary', BaseballDictionary);
 app.use('/api/game', BaseballGame);
 app.use('/api/teammember', BaseballTeamMember);
+app.use('/api/billboard', billboardRoutes); // 전광판 라우터 연결
 
+// Socket.IO 설정
+setSocketIo(io); // Socket.IO와 전광판 라우터 연결
 
-
-app.get('/',(req,res)=>{
+// 기본 라우터
+app.get('/', (req, res) => {
     res.send('Hello, Express');
 });
-/*app.get(주소, 라우터) : 주소에 대한 GET요청이 올 때 어떤 동작을 할지 적는 부분
-ex) app.post, app.patch, app.put, app.delete, app.options
-express에서는 http와 다르게 res.write, rew.end 대신 res.send 사용
-**/
 
+// 서버 실행
+const port = app.get('port');
 
-const port = app.get('port'); // 설정된 포트 가져오기
-
-app.listen(port, async () => {
+server.listen(port, async () => {
     try {
         console.log(`${port}번 포트에서 대기 중`);
     } catch (error) {
