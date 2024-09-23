@@ -47,7 +47,7 @@ router.post('/:apikey', async (req, res) => {
         }
 
         // 해당 게시물 및 사용자가 존재하는지 확인
-        const post = await Post.findByPk(postId);
+        const post = await BaseballCommunityPost.findByPk(postId);
         //const user = await User.findByPk(userId);
 
         if (!post) {
