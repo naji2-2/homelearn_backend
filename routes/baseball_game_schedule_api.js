@@ -51,8 +51,8 @@ router.get('/:apikey', async (req, res) => {
 
         res.json(games);
     } catch (error) {
-        console.error('경기 데이터를 가져오는 중 오류:', error);
         res.status(500).json({ error: 'DB에서 경기 데이터를 가져오는 중 오류가 발생했습니다.' });
+        console.error('경기 데이터를 가져오는 중 오류:', error);
     }
 });
 

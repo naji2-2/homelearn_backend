@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
             required: true 
         },
         baseball_team_name: {
-            type: DataTypes.INTEGER
+            type: DataTypes.STRING(255)
         },
         image_url: {
             type: DataTypes.TEXT

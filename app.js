@@ -60,7 +60,7 @@ app.use('/api/team', BaseballTeam);
 app.use('/api/homeground', BaseballHomegroundInfoRouter);
 app.use('/api/homegroundparking', BaseballHomegroundParkingRouter);
 app.use('/api/post', BaseballCommunityPost);
-app.use('/api/post/comment', BaseballCommunityPostComment);
+app.use('/api/postcomment', BaseballCommunityPostComment);
 app.use('/api/foodshop', FoodShop);
 app.use('/api/foodshoporder', FoodShopOrder);
 app.use('/api/foodshopreview', FoodShopReview);

@@ -3,8 +3,8 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
 // Sequelize 인스턴스 생성 (MySQL 연결 설정)
-const sequelize = new Sequelize('homelearn', 'root', process.env.MYSQL_PASSWORD, {
-    host: 'localhost',
+const sequelize = new Sequelize('homelearn', process.env.MYSQL_ID, process.env.MYSQL_PASSWORD, {
+    host: process.env.SERVER_IP,
     dialect: 'mysql',
     logging: false, // SQL 쿼리 로그를 보려면 true로 설정
 });

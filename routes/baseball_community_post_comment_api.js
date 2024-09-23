@@ -1,7 +1,8 @@
 const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
-const Comment = require('../models/baseball_community_post_comment_model')(require('../config/db'));
-const Post = require('../models/baseball_community_post_model')(require('../config/db'));
+const BaseballCommunityPostComment = require('../models/baseball_community_post_comment_model.js')(require('../config/db'));
+const BaseballCommunityPost = require('../models/baseball_community_post_model.js')(require('../config/db'));
+
 
 const router = express.Router();
 
@@ -11,10 +12,28 @@ const key = {
 };
 
 
+router.get('/:apikey', async (req, res) => {
+    try {
+        
+        const { apikey } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        const comment = await BaseballCommunityPostComment.findAll();
+        
+        res.status(200).json(comment);
+    } catch (error) {
+        res.status(500).json({ error: '게시물 조회 중 오류가 발생했습니다.' });
+    }
+});
+
 // 댓글 작성
 router.post('/:apikey', async (req, res) => {
     try {
-        let { apikey } = req.params;
+        const { apikey } = req.params;
         const { postId, userId, content } = req.body;
 
         // API 키 검증
@@ -52,9 +71,38 @@ router.post('/:apikey', async (req, res) => {
     }
 });
 
+
+router.get('/:apikey/:id', async (req, res) => {
+    try {
+        const { apikey } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        const comment = await Comment.findAll({
+            where: { postId: id }
+        });
+
+        if (comment) {
+            res.status(200).json(comment);
+        } else {
+            res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: '게시물 조회 중 오류가 발생했습니다.' });
+    }
+});
+
 router.delete('/:apikey/:id', async (req, res) => {
     try {
-        const { id } = req.params;
+        const { apikey, id } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
 
         const comment = await Comment.findByPk(id);
 

@@ -14,7 +14,7 @@ const key = {
 // 단어 검색
 router.get('/:apikey/search/:word', async (req, res) => {
     try {
-        const { apikey, search } = req.params;
+        const { apikey, word } = req.params;
 
         // API 키 검증
         if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
