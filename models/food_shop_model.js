@@ -20,6 +20,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
+        image_url: {
+            type: DataTypes.TEXT,
+            allowNull: true, // 이미지가 필수 항목이 아니면 true로 설정
+        },
         category: {
             type: DataTypes.STRING(255),
             allowNull: false,

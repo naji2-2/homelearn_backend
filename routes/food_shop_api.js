@@ -4,6 +4,7 @@ const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
 const FoodShop = require('../models/food_shop_model.js')(require('../config/db'));
 const FoodShopMenu = require('../models/food_shop_menu_model.js')(require('../config/db'));
+const FoodShopReview = require('../models/food_shop_review_model.js')(require('../config/db'));
 
 const router = express.Router();
 
@@ -28,6 +29,16 @@ router.get('/:apikey', async (req, res) => {
         for (const foodShop of foodShops) {
             const foodShopMenuList = await FoodShopMenu.findAll({ where: { shop_id: foodShop.id } });
             foodShop.menu = foodShopMenuList;
+
+            // 리뷰 평균 계산
+            const reviews = await FoodShopReview.findAll({ where: { shopId: foodShop.id } });
+            if (reviews.length > 0) {
+                const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+                const averageRating = totalRating / reviews.length;
+                foodShop.star = averageRating; // 평균 평점을 star 컬럼에 설정
+            } else {
+                foodShop.star = 0; // 리뷰가 없으면 0으로 설정
+            }
         }
 
         if (foodShops.length > 0) {
@@ -56,10 +67,19 @@ router.get('/:apikey/:id', async (req, res) => {
         const shop_id = id;
         const foodShopMenuList = await FoodShopMenu.findAll({where: {shop_id}});
 
+        // 리뷰 평균 계산
+        const reviews = await FoodShopReview.findAll({ where: { shop_id } });
+        if (reviews.length > 0) {
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalRating / reviews.length;
+            foodShop.star = averageRating; // 평균 평점을 star 컬럼에 설정
+        } else {
+            foodShop.star = 0; // 리뷰가 없으면 0으로 설정
+        }
+
         if (foodShop) {
             foodShop.menu = foodShopMenuList;
             res.status(200).json(foodShop);
-            
         } else {
             res.status(404).send('Food shop not found.');
         }
@@ -87,6 +107,16 @@ router.get('/:apikey/homeground/:homeground', async (req, res) => {
         for (const foodShop of foodShops) {
             const foodShopMenuList = await FoodShopMenu.findAll({ where: { shop_id: foodShop.id } });
             foodShop.menu = foodShopMenuList;
+
+            // 리뷰 평균 계산
+            const reviews = await FoodShopReview.findAll({ where: { shop_id: foodShop.id } });
+            if (reviews.length > 0) {
+                const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+                const averageRating = totalRating / reviews.length;
+                foodShop.star = averageRating; // 평균 평점을 star 컬럼에 설정
+            } else {
+                foodShop.star = 0; // 리뷰가 없으면 0으로 설정
+            }
         }
 
         if (foodShops.length > 0) {
