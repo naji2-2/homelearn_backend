@@ -59,7 +59,7 @@ router.post('/:apikey', async (req, res) => {
         // }
 
         // 댓글 생성
-        const comment = await Comment.create({ postId, userId, content });
+        const comment = await BaseballCommunityPostComment.create({ postId, userId, content });
 
         await post.increment('comments_num', { by: 1 });
 
@@ -74,14 +74,14 @@ router.post('/:apikey', async (req, res) => {
 
 router.get('/:apikey/:id', async (req, res) => {
     try {
-        const { apikey } = req.params;
+        const { apikey, id } = req.params;
 
         // API 키 검증
         if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
             return res.status(401).send('apikey is not valid.');
         }
 
-        const comment = await Comment.findAll({
+        const comment = await BaseballCommunityPostComment.findAll({
             where: { postId: id }
         });
 
@@ -91,6 +91,7 @@ router.get('/:apikey/:id', async (req, res) => {
             res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
         }
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: '게시물 조회 중 오류가 발생했습니다.' });
     }
 });
@@ -104,7 +105,7 @@ router.delete('/:apikey/:id', async (req, res) => {
             return res.status(401).send('apikey is not valid.');
         }
 
-        const comment = await Comment.findByPk(id);
+        const comment = await BaseballCommunityPostComment.findByPk(id);
 
         if (!comment) {
             return res.status(404).json({ error: '해당 댓글을 찾을 수 없습니다.' });
