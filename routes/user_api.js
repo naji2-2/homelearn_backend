@@ -11,7 +11,7 @@ const key = {
 };
 
 // 사용자 생성 (POST /users)
-router.post('/:apikey/users', async (req, res) => {
+router.post('/:apikey', async (req, res) => {
     try {
         const { apikey } = req.params;
 
@@ -30,7 +30,7 @@ router.post('/:apikey/users', async (req, res) => {
 });
 
 // 모든 사용자 조회 (GET /users)
-router.get('/:apikey/users', async (req, res) => {
+router.get('/:apikey', async (req, res) => {
     try {
         const { apikey } = req.params;
 
@@ -47,7 +47,7 @@ router.get('/:apikey/users', async (req, res) => {
 });
 
 // 사용자 업데이트 (PUT /users/:id)
-router.put('/:apikey/users/:id', async (req, res) => {
+router.put('/:apikey/:id', async (req, res) => {
     try {
         const { apikey } = req.params;
 
@@ -69,7 +69,7 @@ router.put('/:apikey/users/:id', async (req, res) => {
 });
 
 // 사용자 삭제 (DELETE /users/:id)
-router.delete('/:apikey/users/:id', async (req, res) => {
+router.delete('/:apikey/:id', async (req, res) => {
     try {
         const { apikey } = req.params;
 

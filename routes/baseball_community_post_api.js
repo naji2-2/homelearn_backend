@@ -3,32 +3,23 @@ const uuidAPIKey = require('uuid-apikey');
 const BaseballCommunityPost = require('../models/baseball_community_post_model.js')(require('../config/db'));
 const router = express.Router();
 
-
 const key = {
     apiKey: process.env.API_KEY,
     uuid: '36f77065-60fa-4b4a-90db-f2a02be13f34'
-}
+};
 
-
-// router.use('/:apikey', (req, res, next) => {
-//     const { apikey } = req.params;
-//     if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-//         console.warn(`Invalid API key`);
-//     }
-//     next();
-// });
-
+router.use('/:apikey', (req, res, next) => {
+    const { apikey } = req.params;
+    if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+        console.warn(`Invalid API key`);
+    }
+    next();
+});
 
 // POST /posts - 새로운 게시물 작성
 router.post('/:apikey', async (req, res) => {
+    let { apikey } = req.params;
     try {
-        const { apikey } = req.params;
-
-        // API 키 검증
-        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-            return res.status(401).send('apikey is not valid.');
-        }
-
         const { user_id, baseball_community_id, title, content, image_url } = req.body;
         const newPost = await BaseballCommunityPost.create({
             user_id,
@@ -46,14 +37,8 @@ router.post('/:apikey', async (req, res) => {
 
 // GET /posts - 모든 게시물 조회
 router.get('/:apikey', async (req, res) => {
+    let { apikey, id } = req.params;
     try {
-        const { apikey } = req.params;
-
-        // API 키 검증
-        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-            return res.status(401).send('apikey is not valid.');
-        }
-
         const posts = await BaseballCommunityPost.findAll();
         res.status(200).json(posts);
     } catch (error) {
@@ -63,14 +48,8 @@ router.get('/:apikey', async (req, res) => {
 
 // GET /posts/:id - 특정 게시물 조회
 router.get('/:apikey/:id', async (req, res) => {
+    let { apikey, id } = req.params;
     try {
-        const { apikey } = req.params;
-
-        // API 키 검증
-        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-            return res.status(401).send('apikey is not valid.');
-        }
-
         const post = await BaseballCommunityPost.findByPk(req.params.id);
         if (post) {
             res.status(200).json(post);
@@ -84,23 +63,16 @@ router.get('/:apikey/:id', async (req, res) => {
 
 // PUT /posts/:id - 게시물 수정
 router.put('/:apikey/:id', async (req, res) => {
+    let { apikey, id } = req.params;
     try {
-        
-        const { apikey } = req.params;
-
-        // API 키 검증
-        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-            return res.status(401).send('apikey is not valid.');
-        }
-
-
-        const { title, content, image_url } = req.body;
+        const { title, content, image_url, like_num } = req.body;
         const post = await BaseballCommunityPost.findByPk(req.params.id);
 
         if (post) {
             post.title = title || post.title;
             post.content = content || post.content;
             post.image_url = image_url || post.image_url;
+            post.like_num = like_num !== undefined ? like_num : post.like_num; // like_num 업데이트 추가
             post.updated_at = new Date();
             await post.save();
 
@@ -115,15 +87,8 @@ router.put('/:apikey/:id', async (req, res) => {
 
 // DELETE /posts/:id - 게시물 삭제
 router.delete('/:apikey/:id', async (req, res) => {
+    let { apikey, id } = req.params;
     try {
-        const { apikey } = req.params;
-
-        // API 키 검증
-        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
-            return res.status(401).send('apikey is not valid.');
-        }
-
-
         const post = await BaseballCommunityPost.findByPk(req.params.id);
 
         if (post) {

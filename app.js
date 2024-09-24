@@ -27,14 +27,16 @@ const BaseballCommunityPost = require('./routes/baseball_community_post_api');
 const BaseballCommunityPostComment = require('./routes/baseball_community_post_comment_api');
 const BaseballHomegroundParkingRouter = require('./routes/baseball_homeground_parking_api');
 const FoodShop = require('./routes/food_shop_api');
+const FoodShopMenu = require('./routes/food_shop_menu_api');
 const FoodShopOrder = require('./routes/food_shop_order_api');
 const FoodShopReview = require('./routes/food_shop_review_api');
 const CheerSong = require('./routes/cheer_song_api');
 const BaseballDictionary = require('./routes/baseball_dictionary_api');
 const BaseballGame = require('./routes/baseball_game_schedule_api');
 const BaseballTeamMember = require('./routes/baseball_team_member_api');
-const { router: billboardRoutes, setSocketIo } = require('./routes/baseball_community_billboard_api.js'); // 전광판 라우터 불러오기
+const { router: billboardRoutes, setSocketIo } = require('./routes/baseball_community_billboard_api.js'); 
 const Calendar = require('./routes/calendar_api');
+const User = require('./routes/user_api');
 
 // CORS 설정
 app.use(cors());
@@ -62,6 +64,7 @@ app.use('/api/homegroundparking', BaseballHomegroundParkingRouter);
 app.use('/api/post', BaseballCommunityPost);
 app.use('/api/postcomment', BaseballCommunityPostComment);
 app.use('/api/foodshop', FoodShop);
+app.use('/api/foodshopmenu', FoodShopMenu);
 app.use('/api/foodshoporder', FoodShopOrder);
 app.use('/api/foodshopreview', FoodShopReview);
 app.use('/api/cheersong', CheerSong);
@@ -70,6 +73,7 @@ app.use('/api/game', BaseballGame);
 app.use('/api/teammember', BaseballTeamMember);
 app.use('/api/billboard', billboardRoutes); // 전광판 라우터 연결
 app.use('/api/calendar', Calendar);
+app.use('/api/user', User);
 
 // Socket.IO 설정
 setSocketIo(io); // Socket.IO와 전광판 라우터 연결
