@@ -20,8 +20,8 @@ router.post('/:apikey', async (req, res) => {
             return res.status(401).send('apikey is not valid.');
         }
 
-        const { name, baseball_team_name, image_url, kakao_id } = req.body;
-        const user = await User.create({ name, baseball_team_name, image_url, kakao_id });
+        const { name, baseball_team_name, image_url } = req.body;
+        const user = await User.create({ name, baseball_team_name, image_url });
         res.status(201).json(user);
     } catch (error) {
         console.error(error);

@@ -39,6 +39,10 @@ const Calendar = require('./routes/calendar_api');
 const User = require('./routes/user_api');
 
 // CORS 설정
+
+app.use('/uploads', express.static('uploads'));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors());
 app.set('port', process.env.PORT || 3000);
 app.use(morgan('dev'));

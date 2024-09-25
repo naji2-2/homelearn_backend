@@ -3,6 +3,8 @@ const uuidAPIKey = require('uuid-apikey');
 const sequelize = require('../config/db');
 const FoodShopReview = require('../models/food_shop_review_model.js')(sequelize);
 const FoodShop = require('../models/food_shop_model.js')(sequelize);
+const multer = require('multer'); // multer 추가
+const path = require('path');  // 경로 조작을 위해 추가
 
 const router = express.Router();
 
@@ -57,44 +59,41 @@ router.get('/:apikey/:id', async (req, res) => {
     }
 });
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // 파일 저장 폴더 설정
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname)); // 고유 파일명 생성
+    }
+});
+
+const upload = multer({ storage });
 
 // 리뷰 생성
-router.post('/:apikey', async (req, res) => {
-    try {
-        let { apikey } = req.params;
-        const { shopId, userId, content, rating, image_url } = req.body;
+router.post('/:apikey', upload.single('image'), async (req, res) => {
+    const { apikey } = req.params;
 
         // API 키 검증
         if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
             return res.status(401).send('apikey is not valid.');
         }
-
-        // 필수 필드 확인
-        if (!userId || !content || !rating || !shopId) {
-            return res.status(400).json({ error: 'userId와 content는 필수 항목입니다.' });
-        }
-
-        // 리뷰 생성
-        const review = await FoodShopReview.create({ userId, shopId, content, rating, image_url });
-
-
-        // 모든 리뷰 가져오기
-        const reviews = await FoodShopReview.findAll({ where: { shopId } });
-        // 평균 별점 계산
-        const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0);
-        const averageRating = totalRating / reviews.length;
-        // FoodShop의 star 업데이트
-        await FoodShop.update({ star: averageRating }, { where: { id: shopId } });
-
         
+    try {
+        const { userId, shopId, content, rating } = req.body;
+        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null; // 이미지 URL 생성
 
-        // 생성된 리뷰 반환
+        // 데이터베이스에 리뷰 저장하는 로직 추가 (예: Sequelize 사용)
+        const review = await FoodShopReview.create({ userId, shopId, content, rating, image_url: imageUrl });
+
         res.status(201).json(review);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: '리뷰 생성에 실패했습니다.' });
+        console.error(error);
+        res.status(500).json({ error: 'Failed to create review.' });
     }
 });
+
 
 // 리뷰 삭제
 router.delete('/:apikey/:id', async (req, res) => {
