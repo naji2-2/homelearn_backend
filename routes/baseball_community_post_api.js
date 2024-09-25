@@ -61,6 +61,30 @@ router.get('/:apikey/:id', async (req, res) => {
     }
 });
 
+router.get('/:apikey/:id', async (req, res) => {
+    try {
+        const { apikey, id } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        const post = await BaseballCommunityPost.findAll({
+            where: { userId: id }
+        });
+
+        if (post) {
+            res.status(200).json(post);
+        } else {
+            res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: '게시물 조회 중 오류가 발생했습니다.' });
+    }
+});
+
 // PUT /posts/:id - 게시물 수정
 router.put('/:apikey/:id', async (req, res) => {
     let { apikey, id } = req.params;
