@@ -2,6 +2,7 @@ const express = require('express');
 const uuidAPIKey = require('uuid-apikey');
 const BaseballCommunityPost = require('../models/baseball_community_post_model.js')(require('../config/db'));
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
 const key = {
     apiKey: process.env.API_KEY,
@@ -17,16 +18,34 @@ router.use('/:apikey', (req, res, next) => {
 });
 
 // POST /posts - 새로운 게시물 작성
+
 router.post('/:apikey', async (req, res) => {
     let { apikey } = req.params;
+
+    // // JWT에서 사용자 ID 추출
+    // const token = req.headers.authorization?.split(' ')[1]; // "Bearer token" 형태에서 token 추출
+    // let userId;
+
+    // if (token) {
+    //     try {
+    //         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //         userId = decoded.user_id; // JWT에서 사용자 ID 추출
+    //     } catch (err) {
+    //         return res.status(401).json({ error: '유효하지 않은 토큰입니다.' });
+    //     }
+    // }
+
     try {
-        const { user_id, baseball_community_id, title, content, image_url } = req.body;
+        const { baseball_community_id, title, content, image_url, user_id } = req.body;
+
+        console.log('요청 데이터:', req.body);
+
         const newPost = await BaseballCommunityPost.create({
-            user_id,
             baseball_community_id,
             title,
             content,
-            image_url
+            image_url,
+            user_id
         });
         res.status(201).json(newPost);
     } catch (error) {
@@ -34,6 +53,7 @@ router.post('/:apikey', async (req, res) => {
         res.status(500).json({ error: '게시물 생성 중 오류가 발생했습니다.' });
     }
 });
+
 
 // GET /posts - 모든 게시물 조회
 router.get('/:apikey', async (req, res) => {
@@ -71,7 +91,7 @@ router.get('/:apikey/:id', async (req, res) => {
         }
 
         const post = await BaseballCommunityPost.findAll({
-            where: { userId: id }
+            where: { user_id: id }
         });
 
         if (post) {

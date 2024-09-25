@@ -8,13 +8,9 @@ module.exports = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
-        userId: { 
+        user_id: { 
             type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: 'user_information',
-                key: 'id'
-            }
+            allowNull: true
         },
         baseball_community_id: {
             type: DataTypes.INTEGER,
