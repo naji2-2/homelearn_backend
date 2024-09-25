@@ -35,10 +35,11 @@ router.get('/:apikey', async (req, res) => {
             if (reviews.length > 0) {
                 const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
                 const averageRating = totalRating / reviews.length;
-                foodShop.star = averageRating; // 평균 평점을 star 컬럼에 설정
+                foodShop.star = parseFloat(averageRating.toFixed(1)); // 소수점 첫째 자리까지만 저장
             } else {
                 foodShop.star = 0; // 리뷰가 없으면 0으로 설정
             }
+
         }
 
         if (foodShops.length > 0) {
@@ -68,15 +69,14 @@ router.get('/:apikey/:id', async (req, res) => {
         const foodShopMenuList = await FoodShopMenu.findAll({where: {shop_id}});
 
         // 리뷰 평균 계산
-        const reviews = await FoodShopReview.findAll({ where: { shop_id } });
+        const reviews = await FoodShopReview.findAll({ where: { shopId: foodShop.id } });
         if (reviews.length > 0) {
             const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
             const averageRating = totalRating / reviews.length;
-            foodShop.star = averageRating; // 평균 평점을 star 컬럼에 설정
+            foodShop.star = parseFloat(averageRating.toFixed(1)); // 소수점 첫째 자리까지만 저장
         } else {
             foodShop.star = 0; // 리뷰가 없으면 0으로 설정
         }
-
         if (foodShop) {
             foodShop.menu = foodShopMenuList;
             res.status(200).json(foodShop);
@@ -109,11 +109,11 @@ router.get('/:apikey/homeground/:homeground', async (req, res) => {
             foodShop.menu = foodShopMenuList;
 
             // 리뷰 평균 계산
-            const reviews = await FoodShopReview.findAll({ where: { shop_id: foodShop.id } });
+            const reviews = await FoodShopReview.findAll({ where: { shopId: foodShop.id } });
             if (reviews.length > 0) {
                 const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
                 const averageRating = totalRating / reviews.length;
-                foodShop.star = averageRating; // 평균 평점을 star 컬럼에 설정
+                foodShop.star = parseFloat(averageRating.toFixed(1)); // 소수점 첫째 자리까지만 저장
             } else {
                 foodShop.star = 0; // 리뷰가 없으면 0으로 설정
             }
