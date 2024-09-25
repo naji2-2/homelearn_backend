@@ -59,6 +59,31 @@ router.get('/:apikey/:id', async (req, res) => {
     }
 });
 
+
+router.get('/:apikey/:id', async (req, res) => {
+    try {
+        const { apikey, id } = req.params;
+
+        // API 키 검증
+        if (!uuidAPIKey.isAPIKey(apikey) || !uuidAPIKey.check(apikey, key.uuid)) {
+            return res.status(401).send('apikey is not valid.');
+        }
+
+        const review = await FoodShopReview.findAll({
+            where: { userId: id }
+        });
+
+        if (review) {
+            res.status(200).json(review);
+        } else {
+            res.status(404).json({ error: '리뷰를 찾을 수 없습니다.' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: '리뷰 조회 중 오류가 발생했습니다.' });
+    }
+});
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/'); // 파일 저장 폴더 설정
