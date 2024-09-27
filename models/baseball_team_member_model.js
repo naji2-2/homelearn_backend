@@ -36,10 +36,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        join_date: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-        },
         height: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -55,7 +51,9 @@ module.exports = (sequelize) => {
         ceer_song: {
             type: DataTypes.STRING(255),
             allowNull: true,
-        }
+        },
+        image_url: {
+            type: DataTypes.TEXT        }
     }, {
         tableName: 'baseball_team_member',
         timestamps: true,

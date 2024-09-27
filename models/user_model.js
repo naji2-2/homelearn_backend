@@ -20,8 +20,8 @@ module.exports = (sequelize) => {
         },
         kakao_id: {
             type: DataTypes.INTEGER,
-            required: true,
-            unique: true
+            //required: true,
+            //unique: true
         }
     }, {
         tableName: 'user_information',
