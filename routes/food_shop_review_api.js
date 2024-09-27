@@ -107,7 +107,7 @@ router.post('/:apikey', upload.single('image'), async (req, res) => {
         
     try {
         const { userId, shopId, content, rating } = req.body;
-        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null; // 이미지 URL 생성
+        const imageUrl = req.file ? `http://3.138.127.122:5000/uploads/${req.file.filename}` : null;
 
         // 데이터베이스에 리뷰 저장하는 로직 추가 (예: Sequelize 사용)
         const review = await FoodShopReview.create({ userId, shopId, content, rating, image_url: imageUrl });
